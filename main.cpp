@@ -4,7 +4,7 @@
 
 const int MAX_SIZE = 100;
 
-void readMatrixFromFile(int matrix[MAX_SIZE][MAX_SIZE], int &size, const char *filename);
+void readMatrixFromFile(int matrix[MAX_SIZE][MAX_SIZE], int &size, const char *filename, int matrixnum);
 void printMatrix(const int matrix[MAX_SIZE][MAX_SIZE], int size);
 void addMatrices(const int matrixA[MAX_SIZE][MAX_SIZE], const int matrixB[MAX_SIZE][MAX_SIZE], int result[MAX_SIZE][MAX_SIZE], int size);
 void multiplyMatrices(const int matrixA[MAX_SIZE][MAX_SIZE], const int matrixB[MAX_SIZE][MAX_SIZE], int result[MAX_SIZE][MAX_SIZE], int size);
@@ -18,8 +18,8 @@ int main() {
     int resultProduct[MAX_SIZE][MAX_SIZE];
     int resultDifference[MAX_SIZE][MAX_SIZE];
 
-    readMatrixFromFile(matrixA, sizeA, "matrix_input.txt");
-    readMatrixFromFile(matrixB, sizeB, "matrix_input.txt");
+    readMatrixFromFile(matrixA, sizeA, "matrix_input.txt", 1);
+    readMatrixFromFile(matrixB, sizeB, "matrix_input.txt", 2);
 
     std::cout << "Manu Redd" << std::endl;
     std::cout << "Lab #6: Matrix manipulation" << std::endl;
@@ -50,13 +50,14 @@ int main() {
     return 0;
 }
 
-void readMatrixFromFile(int matrix[MAX_SIZE][MAX_SIZE], int &size, const char *filename) {
+void readMatrixFromFile(int matrix[MAX_SIZE][MAX_SIZE], int &size, const char *filename, int matrixnum) {
     std::ifstream file(filename);
     if (file.is_open()) {
         file >> size;
-        for (int i = 0; i < size; i++) {
+        // Skip lines based on matrix number
+        for (int i = 0; i < matrixnum * size; i++) {
             for (int j = 0; j < size; j++) {
-                file >> matrix[i][j];
+                file >> matrix[i % size][j];
             }
         }
         file.close();
@@ -65,6 +66,7 @@ void readMatrixFromFile(int matrix[MAX_SIZE][MAX_SIZE], int &size, const char *f
         exit(1);
     }
 }
+
 
 void printMatrix(const int matrix[MAX_SIZE][MAX_SIZE], int size) {
     for (int i = 0; i < size; i++) {
